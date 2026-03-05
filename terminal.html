@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terminal</title><link rel="stylesheet" href="style.css">
+<style>
+body{background:#0c120f;color:#b9f2a1}
+pre{white-space:pre-wrap}
+input,button{font-family:inherit}
+.ctr{max-width:900px;margin:24px auto;padding:16px;background:#111;border:1px solid #2b2b2b}
+label{display:block;margin:8px 0}
+</style>
+</head>
+<body>
+<div class="ctr">
+  <h1 style="margin:0 0 8px;color:#58ff87">B.A.R.D Console</h1>
+  <p>Clearance required</p>
+  <form id="auth">
+    <label>Username <input id="u"></label>
+    <label>Password <input id="p" type="password"></label>
+    <button>Enter</button>
+  </form>
+  <pre id="out" style="min-height:320px"></pre>
+</div>
+<script>
+const lines=[
+  "> boot bard_console",
+  "> initialising subsystems ... OK",
+  "> linking Interchange robotics facility ... OK",
+  "> Windscale core telemetry ... PARTIAL",
+  "> Oberon signal ... DETECTED",
+  "> decrypting research logs ... OK",
+  "> bunker lattice ping: L1–L15 ONLINE",
+  "> robotics registry: SENTRIES ACTIVE",
+  "> contamination index: OSCILLATING",
+  "> compiling hazard map ... OK",
+  "> opening classified dossiers ... READY",
+  "> session elevated: ADMINISTRATOR",
+  "> --- ROBOTICS SUMMARY ---",
+  "> Class B Unit 45 : ACTIVE",
+  "> Orange/White/Black sentries : ACTIVE",
+  "> Flamethrower variant : DEPLOYED",
+  "> HMG variant : DEPLOYED",
+  "> --- LINKS ---",
+  "> /robots.html",
+  "> /dossier.html",
+  "> /locations.html",
+  "> --- END ---"
+];
+function runOut(target, arr, delay=35){
+  let i=0; target.textContent='';
+  (function tick(){ if(i<arr.length){ target.textContent += arr[i++]+"\n"; setTimeout(tick, delay);} })();
+}
+const form=document.getElementById('auth');
+form.addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const u=document.getElementById('u').value.trim();
+  const p=document.getElementById('p').value;
+  const out=document.getElementById('out');
+  if(u==='Admin' && p==='Areyouadmin?'){
+    runOut(out, lines, 25);
+  }else{
+    runOut(out, ["> access denied", "> incorrect credentials"], 40);
+  }
+});
+</script>
+</body></html>

@@ -1,0 +1,1 @@
+console.log('B.A.R.D heavy site loaded');

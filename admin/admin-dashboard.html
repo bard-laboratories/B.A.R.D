@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Dashboard</title><link rel="stylesheet" href="../style.css"></head>
+<body><div class="wrap">
+<h1>B.A.R.D Content Editor</h1>
+<div class="panel">
+  <p>Load <code>../content.json</code>, edit, and download an updated file to upload to GitHub.</p>
+  <p>
+    <button class="btn" onclick="loadJson()">Load content.json</button>
+    <button class="btn" onclick="downloadJson()">Download edited JSON</button>
+  </p>
+  <textarea id="editor" style="width:100%;min-height:360px;font-family:monospace"></textarea>
+</div>
+</div>
+<script>
+async function loadJson(){
+  const res=await fetch('../content.json',{cache:'no-store'});
+  const txt=await res.text();
+  document.getElementById('editor').value=txt;
+}
+function downloadJson(){
+  const blob=new Blob([document.getElementById('editor').value],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='content.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+</body></html>
