@@ -338,72 +338,77 @@
     })();
   </script>
 
-  <!-- ---------- Live Active Users (Firebase presence) ---------- -->
   <script type="module">
-    // Replace the placeholders below with your Firebase web app config.
-    // If you leave the "YOUR_..." placeholders, this block safely does nothing.
-    const firebaseConfig = {
-      apiKey:      "YOUR_API_KEY",
-      authDomain:  "YOUR_PROJECT_ID.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-      projectId:   "YOUR_PROJECT_ID",
-      appId:       "YOUR_APP_ID"
-    };
+  // ---------- YOUR REAL FIREBASE CONFIG ----------
+  const firebaseConfig = {
+    apiKey: "AIzaSyDV3yn0t1FXUE_xPSqrQqqY5ZXBUcKIXHo",
+    authDomain: "b-a-r-d-5e93c.firebaseapp.com",
+    databaseURL: "https://b-a-r-d-default-rtdb.firebaseio.com/",
+    projectId: "b-a-r-d-5e93c",
+    appId: "1:429493636003:web:014be9fd61a80966942816"
+  };
+  // ----------------------------------------------
 
-    const isConfigured =
-      firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("YOUR_") &&
-      firebaseConfig.projectId && !firebaseConfig.projectId.startsWith("YOUR_");
+  // Accept BOTH legacy (.firebaseio.com) and regional (.firebasedatabase.app) DB URLs
+  const configured =
+    !!firebaseConfig.apiKey &&
+    !!firebaseConfig.projectId &&
+    !!firebaseConfig.databaseURL &&
+    (firebaseConfig.databaseURL.includes("firebaseio.com") || firebaseConfig.databaseURL.includes("firebasedatabase.app"));
 
-    const countEl = document.getElementById('activeUsersCount');
-    const barEl   = document.getElementById('activeUsersBar');
-    const pctEl   = document.getElementById('activeUsersPct');
+  const countEl = document.getElementById('activeUsersCount');
+  const barEl   = document.getElementById('activeUsersBar');
+  const pctEl   = document.getElementById('activeUsersPct');
 
-    function updateActiveUsers(n){
-      const pct = Math.max(0, Math.min(100, n));
-      countEl.textContent = String(n);
-      barEl.style.width = pct + '%';
-      pctEl.textContent = pct + '%';
-    }
-    updateActiveUsers(0);
+  const updateActiveUsers = (n) => {
+    const pct = Math.max(0, Math.min(100, n)); // 1 user = 1%
+    countEl.textContent = String(n);
+    barEl.style.width = pct + '%';
+    pctEl.textContent = pct + '%';
+  };
+  updateActiveUsers(0);
 
-    if (!isConfigured) {
-      console.warn("[B.A.R.D] Active users is disabled (no Firebase config set).");
-    } else {
-      try {
-        const [{ initializeApp },
-               { getDatabase, ref, onValue, set, onDisconnect, serverTimestamp },
-               { getAuth, signInAnonymously, onAuthStateChanged }] = await Promise.all([
-          import('https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js'),
-          import('https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js'),
-          import('https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js')
-        ]);
+  if (!configured) {
+    console.warn("[B.A.R.D] Active users disabled (missing/invalid config).");
+  } else {
+    try {
+      const [{ initializeApp },
+             { getDatabase, ref, onValue, set, onDisconnect, serverTimestamp },
+             { getAuth, signInAnonymously, onAuthStateChanged }] = await Promise.all([
+        import('https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js'),
+        import('https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js')
+      ]);
 
-        const app = initializeApp(firebaseConfig);
-        const db  = getDatabase(app);
-        const auth= getAuth(app);
+      const app  = initializeApp(firebaseConfig);
+      const db   = getDatabase(app);
+      const auth = getAuth(app);
 
-        await signInAnonymously(auth).catch(console.error);
+      // Anonymous auth required for presence
+      await signInAnonymously(auth);
 
-        onAuthStateChanged(auth, async (user) => {
-          if (!user) return;
-          const uid = user.uid;
-          const sessionId = Math.random().toString(36).slice(2,10);
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) return;
 
-          const myRef = ref(db, `presence/${uid}/${sessionId}`);
-          await set(myRef, { ts: serverTimestamp(), page: location.pathname });
-          onDisconnect(myRef).remove();
+        // Each tab writes a session node under /presence/{uid}/{sessionId}
+        const uid = user.uid;
+        const sessionId = Math.random().toString(36).slice(2,10);
 
-          const presenceRoot = ref(db, 'presence');
-          onValue(presenceRoot, (snap) => {
-            let total = 0;
-            snap.forEach(userNode => { total += userNode.size || userNode.numChildren(); });
-            updateActiveUsers(total);
-          });
+        const myRef = ref(db, `presence/${uid}/${sessionId}`);
+        await set(myRef, { ts: serverTimestamp(), page: location.pathname });
+        onDisconnect(myRef).remove();
+
+        // Live total: sum of child counts under /presence
+        const root = ref(db, 'presence');
+        onValue(root, (snap) => {
+          let total = 0;
+          snap.forEach(u => { total += u.size || u.numChildren(); });
+          updateActiveUsers(total);
         });
-      } catch (err) {
-        console.error("Active users setup failed:", err);
-      }
+      });
+    } catch (err) {
+      console.error("[B.A.R.D] Active users setup failed:", err);
+      // Keep counter at 0 if Firebase fails
     }
-  </script>
-</body>
-</html>
+  }
+</script>
