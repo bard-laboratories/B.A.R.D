@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,7 +102,7 @@
         <div class="card">
           <h3>Active projects</h3>
           <div class="big ok" id="kpiProjects">—</div>
-          <span class="tag">lore / R&D</span>
+          <span class="tag">lore / R&amp;D</span>
         </div>
         <div class="card">
           <h3>Users listed</h3>
@@ -141,8 +138,8 @@
           <h3>Recent files</h3>
           <div class="list">
             ./assets/docs/overview.pdfoverview.pdf <small>docs</small></a>
-            <a href="./assets/projects/roadmapp.md <small>projects</small></a>
-            ./syllabus.htmlsyllabus.html <small>site</small></a>
+            ./assets/projects/roadmap.mdroadmap.md <small>projects</small></a>
+            <a href="./htmlsyllabus.html <small>site</small></a>
           </div>
         </div>
       </div>
@@ -186,7 +183,6 @@
       <summary>BARD FILES</summary>
       <div class="group-body">
         <div class="list">
-          <!-- Replace with your real documents -->
           ./assets/docs/overview.pdfoverview.pdf</a>
           ./assets/docs/specs.mdspecs.md</a>
           ./syllabus.htmlsyllabus.html</a>
@@ -363,7 +359,6 @@
     const pctEl   = document.getElementById('activeUsersPct');
 
     function updateActiveUsers(n){
-      // Scale: 1 user = 1% (matches your example). Change the math if you want a different scale.
       const pct = Math.max(0, Math.min(100, n));
       countEl.textContent = String(n);
       barEl.style.width = pct + '%';
@@ -387,22 +382,18 @@
         const db  = getDatabase(app);
         const auth= getAuth(app);
 
-        // Sign in anonymously so we can record presence
         await signInAnonymously(auth).catch(console.error);
 
         onAuthStateChanged(auth, async (user) => {
           if (!user) return;
           const uid = user.uid;
           const sessionId = Math.random().toString(36).slice(2,10);
-          const myRefPath = `presence/${uid}/${sessionId}`;
 
-          const { ref: dbRef } = await import('https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js');
-
-          const myRef = dbRef(db, myRefPath);
+          const myRef = ref(db, `presence/${uid}/${sessionId}`);
           await set(myRef, { ts: serverTimestamp(), page: location.pathname });
           onDisconnect(myRef).remove();
 
-          const presenceRoot = dbRef(db, 'presence');
+          const presenceRoot = ref(db, 'presence');
           onValue(presenceRoot, (snap) => {
             let total = 0;
             snap.forEach(userNode => { total += userNode.size || userNode.numChildren(); });
