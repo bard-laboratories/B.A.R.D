@@ -3,40 +3,66 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>B.A.R.D – Files</title>
+  <title>B.A.R.D Files</title>
   <style>
-    :root{--bg:#0f1117;--panel:#151a23;--line:#1f2430;--ink:#e6e6e6;--muted:#aab2c0;--brand:#7aa2f7;--accent:#89d185;--hover:#1a2230}
+    :root{
+      --bg:#0f1117;--ink:#e6e6e6;--muted:#aab2c0;--line:#1f2430;
+      --panel:#141b27;--panel2:#121823;--brand:#7aa2f7;--ok:#89d185;--warn:#e5c07b;--bad:#e06c75;--hover:#1a2230
+    }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,Arial,"Noto Sans";line-height:1.5}
+    body{margin:0;background:var(--bg);color:var(--ink);
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,Arial,"Noto Sans";line-height:1.5}
+    a{color:var(--ok);text-decoration:none}
+    a:hover{background:var(--hover)}
     header{position:sticky;top:0;z-index:10;background:#151a23;border-bottom:1px solid var(--line)}
-    .wrap{max-width:1100px;margin:0 auto;padding:1rem 1.25rem}
+    .wrap{max-width:1200px;margin:0 auto;padding:1rem 1.25rem}
     .brand{font-weight:700;color:var(--brand);text-decoration:none}
     nav{margin-top:.5rem;display:flex;gap:.65rem;flex-wrap:wrap}
-    nav a{color:var(--muted);text-decoration:none;padding:.35rem .6rem;border-radius:.35rem}
-    nav a:hover{color:var(--ink);background:var(--hover)}
+    nav a{color:var(--muted);padding:.35rem .6rem;border-radius:.35rem}
     nav a[aria-current="page"]{color:var(--ink);background:#1f2a3d;border:1px solid #2a3850}
+    nav a:hover{color:var(--ink);background:var(--hover)}
     main{padding:2rem 1.25rem}
-    h1{margin:.25rem 0 1rem;font-size:clamp(1.6rem,2.5vw,2rem)}
+    h1{margin:.25rem 0 1rem;font-size:clamp(1.6rem,2.5vw,2rem);color:var(--brand)}
+
+    /* Admin overview */
+    .admin{display:grid;gap:1rem}
+    .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:.6rem;padding:1rem}
+    .card h3{margin:.2rem 0 .5rem;font-size:1rem;color:var(--muted);font-weight:600}
+    .card .big{font-size:1.6rem;font-weight:800}
+    .tag{display:inline-block;font-size:.8rem;color:var(--muted)}
+    .ok{color:var(--ok)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+
+    .two-col{display:grid;grid-template-columns:1.2fr .8fr;gap:1rem}
+    @media (max-width: 900px){ .two-col{grid-template-columns:1fr} }
+
+    .list{display:grid;gap:.5rem;margin-top:.25rem}
+    .list a{padding:.4rem .55rem;border-radius:.35rem}
+    .list small{color:var(--muted)}
+
+    .actions{display:flex;flex-wrap:wrap;gap:.5rem}
+    .btn{display:inline-block;background:var(--panel2);border:1px solid var(--line);padding:.5rem .7rem;border-radius:.4rem;color:var(--ink)}
+    .btn:hover{background:#182131}
+
     /* Collapsible groups */
-    details.group{border:1px solid var(--line);border-radius:.6rem;background:#121823}
+    details.group{border:1px solid var(--line);border-radius:.6rem;background:var(--panel2)}
     details.group+details.group{margin-top:1rem}
-    details.group>summary{list-style:none;cursor:pointer;padding:.9rem 1rem;font-weight:700}
+    details.group>summary{list-style:none;cursor:pointer;padding:.9rem 1rem;font-weight:800}
     details.group>summary::-webkit-details-marker{display:none}
     details.group[open]>summary{background:#141b27;border-bottom:1px solid var(--line)}
     .group-body{padding:1rem}
-    /* Robot entries (nested details) */
+
+    /* Robot entries */
     details.robot{border:1px dashed var(--line);border-radius:.5rem}
     details.robot+details.robot{margin-top:.75rem}
-    details.robot>summary{list-style:none;cursor:pointer;padding:.6rem .75rem;font-weight:600;color:var(--accent)}
+    details.robot>summary{list-style:none;cursor:pointer;padding:.6rem .75rem;font-weight:700;color:var(--ok)}
     details.robot>summary::-webkit-details-marker{display:none}
     .entry{padding:.75rem .9rem 1rem}
     .entry dl{margin:0;display:grid;grid-template-columns:160px 1fr;gap:.35rem .75rem}
-    .entry dt{color:var(--muted)}
-    .entry dd{margin:0}
-    /* File link lists */
-    .linklist{display:grid;gap:.5rem}
-    .linklist a{color:var(--accent);text-decoration:none;padding:.45rem .6rem;border-radius:.35rem}
-    .linklist a:hover{background:var(--hover)}
+    .entry dt{color:var(--muted)} .entry dd{margin:0}
+
+    /* Subsection titles */
+    .sub{margin:.25rem 0 .6rem;font-size:1.05rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
   </style>
 </head>
 <body>
@@ -56,12 +82,64 @@
   <main class="wrap">
     <h1>B.A.R.D Files</h1>
 
+    <!-- ===== Admin overview on the Files page ===== -->
+    <section class="admin card" aria-label="Admin overview">
+      <div class="kpis">
+        <div class="card">
+          <h3>Total documents</h3>
+          <div class="big">—</div>
+          <span class="tag">auto‑fill later</span>
+        </div>
+        <div class="card">
+          <h3>Robots covered</h3>
+          <div class="big">—</div>
+          <span class="tag">keep Atomfall data consistent</span>
+        </div>
+        <div class="card">
+          <h3>Active projects</h3>
+          <div class="big ok">—</div>
+          <span class="tag">lore / R&D</span>
+        </div>
+        <div class="card">
+          <h3>Users listed</h3>
+          <div class="big">—</div>
+          <span class="tag">internal</span>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h3>Quick actions</h3>
+          <div class="actions" role="group" aria-label="Quick actions">
+            ./files.html#bard-robotsAdd robot entry</a>
+            ./files.html#bard-filesUpload doc</a>
+            ./files.html#usersUpdate users</a>
+            ./files.html#projectsLog project note</a>
+            ./projects.htmlOpen Projects</a>
+            ./index.htmlGo to Admin Home</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Recent files</h3>
+          <div class="list">
+            <!-- Replace with your latest items -->
+            ./assets/docs/overview.pdfoverview.pdf <small>docs</small></a>
+            ./assets/projects/roadmap.mdroadmap.md <small>projects</small></a>
+            ./syllabus.htmlsyllabus.html <small>site</small></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= B.A.R.D ROBOTS ================= -->
-    <details class="group" id="bard-robots">
+    <details class="group" id="bard-robots" open>
       <summary>B.A.R.D ROBOTS</summary>
       <div class="group-body">
 
-        <!-- Duplicate the block below for each robot -->
+        <p class="sub">Catalog</p>
+
+        <!-- Duplicate this block per robot -->
         <details class="robot">
           <summary>Robot – NAME</summary>
           <div class="entry">
@@ -70,12 +148,11 @@
               <dd><!-- e.g., Recon / Assault / Utility --></dd>
 
               <dt>Robot information</dt>
-              <dd><!-- specs, capabilities, loadout, notes --></dd>
+              <dd><!-- specs, sensors, power, chassis, software; cross‑check with Atomfall notes --></dd>
             </dl>
           </div>
         </details>
 
-        <!-- Example extra (safe to duplicate/remove) -->
         <details class="robot">
           <summary>Robot – NAME</summary>
           <div class="entry">
@@ -93,8 +170,9 @@
     <details class="group" id="bard-files">
       <summary>BARD FILES</summary>
       <div class="group-body">
-        <div class="linklist">
-          <!-- Replace with real document paths in your repo -->
+        <p class="sub">Documents</p>
+        <div class="list">
+          <!-- Replace with real paths -->
           ./assets/docs/overview.pdfoverview.pdf</a>
           ./assets/docs/specs.mdspecs.md</a>
           ./syllabus.htmlsyllabus.html</a>
@@ -106,10 +184,11 @@
     <details class="group" id="users">
       <summary>USERS</summary>
       <div class="group-body">
-        <div class="linklist">
-          <!-- Add or replace with your actual user documents -->
-          <a href="./ers/directory.htmldirectory.html</a>
+        <p class="sub">Directory</p>
+        <div class="list">
+          ./assets/users/directory.htmldirectory.html</a>
           ./assets/users/access.csvaccess.csv</a>
+          ./assets/users/notes.mdnotes.md</a>
         </div>
       </div>
     </details>
@@ -118,7 +197,8 @@
     <details class="group" id="projects">
       <summary>PROJECTS</summary>
       <div class="group-body">
-        <div class="linklist">
+        <p class="sub">Lore & R&D</p>
+        <div class="list">
           ./projects.html#currentcurrent projects</a>
           ./assets/projects/roadmap.mdroadmap.md</a>
           ./assets/projects/archive/archive/</a>
