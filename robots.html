@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Robotics Division</title>style.css
+<title>Robotics Division</title>
+<!-- Make all relative paths resolve from /B.A.R.D/ -->
+/B.A.R.D/
+style.css
 
 <!-- Telemetry chip styles (CPU / RAM / TEMP only) -->
 <style>
@@ -115,7 +118,7 @@
 </section>
 </div>
 
-<!-- Bursty telemetry script (CPU / RAM / TEMP only) -->
+<!-- Bursty telemetry script (CPU / RAM / TEMP) -->
 <script>
 (function(){
   const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
@@ -137,7 +140,6 @@
 
     function tickOne(key){
       const c={...CFG[key]};
-      // optional per-robot spice
       if(box.dataset.boost==='black' && (key==='cpu'||key==='temp')){ c.spikeChance=Math.min(0.22,c.spikeChance+0.06); }
       if(box.dataset.boost==='flame' && key==='temp'){ c.spikeChance=Math.min(0.28,c.spikeChance+0.10); c.spikeMax+=10; }
 
@@ -164,7 +166,7 @@
     }
 
     (function loop(){
-      const delay=250+Math.random()*1350; // 250–1600ms, irregular
+      const delay=250+Math.random()*1350;
       setTimeout(()=>{ ['cpu','ram','temp'].sort(()=>Math.random()-0.5).forEach(tickOne); loop(); }, delay);
     })();
   }
