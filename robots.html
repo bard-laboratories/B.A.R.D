@@ -6,7 +6,7 @@
 <title>Robotics Division</title>
 style.css
 
-<!-- Telemetry chip styles (small, fits your theme) -->
+<!-- Telemetry chip styles -->
 <style>
 .telemetry{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;font-size:12px;color:#555}
 .telemetry .chip{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #cfc7b6;border-radius:6px;padding:4px 6px}
@@ -46,7 +46,6 @@ style.css
       <h2>Class B Robot Unit 45</h2>
       assets/robots/class_b_unit_45.png
       <p>Mid‑weight chassis for patrol and door security; capable of mounting belt‑fed weapons with stabilised fire.</p>
-      <!-- Telemetry -->
       <div class="telemetry" data-cpu="41" data-ram="31" data-gpu="18" data-temp="48">
         <div class="chip"><span class="label">CPU</span><div class="bar"><div class="fill" data-key="cpu"></div></div><span class="val" data-key="cpu">--</span></div>
         <div class="chip"><span class="label">RAM</span><div class="bar"><div class="fill" data-key="ram"></div></div><span class="val" data-key="ram">--</span></div>
@@ -59,7 +58,6 @@ style.css
       <h2>Orange B.A.R.D Robot</h2>
       assets/robots/bard_robot_orange.png
       <p>Hazard‑panel livery; widely deployed across Interchange and exterior compounds.</p>
-      <!-- Telemetry -->
       <div class="telemetry" data-cpu="34" data-ram="22" data-gpu="13" data-temp="42">
         <div class="chip"><span class="label">CPU</span><div class="bar"><div class="fill" data-key="cpu"></div></div><span class="val" data-key="cpu">--</span></div>
         <div class="chip"><span class="label">RAM</span><div class="bar"><div class="fill" data-key="ram"></div></div><span class="val" data-key="ram">--</span></div>
@@ -70,9 +68,8 @@ style.css
 
     <div>
       <h2>White B.A.R.D Robot</h2>
-      assets/robots/bard_robot_white.png
+      <img src="assets/d_robot_white.png
       <p>Interior patrol platform for laboratories and corridors; commonly paired with alarm nodes and card locks.</p>
-      <!-- Telemetry -->
       <div class="telemetry" data-cpu="28" data-ram="19" data-gpu="11" data-temp="40">
         <div class="chip"><span class="label">CPU</span><div class="bar"><div class="fill" data-key="cpu"></div></div><span class="val" data-key="cpu">--</span></div>
         <div class="chip"><span class="label">RAM</span><div class="bar"><div class="fill" data-key="ram"></div></div><span class="val" data-key="ram">--</span></div>
@@ -85,7 +82,6 @@ style.css
       <h2>Black B.A.R.D Robot</h2>
       assets/robots/bard_robot_black.png
       <p>Low‑visibility finish for night posts and yard coverage; harder to spot at range.</p>
-      <!-- Telemetry (boosted spikes) -->
       <div class="telemetry" data-cpu="78" data-ram="76" data-gpu="35" data-temp="68" data-boost="black">
         <div class="chip"><span class="label">CPU</span><div class="bar"><div class="fill" data-key="cpu"></div></div><span class="val" data-key="cpu">--</span></div>
         <div class="chip"><span class="label">RAM</span><div class="bar"><div class="fill" data-key="ram"></div></div><span class="val" data-key="ram">--</span></div>
@@ -98,7 +94,6 @@ style.css
       <h2>Flamethrower Variant</h2>
       assets/robots/bard_robot_flamethrower.png
       <p>Area‑denial projector for corridors and decon zones. Avoid confined spaces.</p>
-      <!-- Telemetry (hotter + GPU spikes) -->
       <div class="telemetry" data-cpu="52" data-ram="48" data-gpu="60" data-temp="72" data-boost="flame">
         <div class="chip"><span class="label">CPU</span><div class="bar"><div class="fill" data-key="cpu"></div></div><span class="val" data-key="cpu">--</span></div>
         <div class="chip"><span class="label">RAM</span><div class="bar"><div class="fill" data-key="ram"></div></div><span class="val" data-key="ram">--</span></div>
@@ -111,7 +106,6 @@ style.css
       <h2>Heavy Machine‑Gun Variant</h2>
       assets/robots/bard_robot_hmg.png
       <p>Perimeter suppression; maintain hard cover and break line‑of‑sight.</p>
-      <!-- Telemetry -->
       <div class="telemetry" data-cpu="47" data-ram="36" data-gpu="29" data-temp="55">
         <div class="chip"><span class="label">CPU</span><div class="bar"><div class="fill" data-key="cpu"></div></div><span class="val" data-key="cpu">--</span></div>
         <div class="chip"><span class="label">RAM</span><div class="bar"><div class="fill" data-key="ram"></div></div><span class="val" data-key="ram">--</span></div>
@@ -135,7 +129,7 @@ style.css
   </section>
 </div>
 
-<!-- Bursty telemetry (irregular ticks, spikes, cooldown, coupling) -->
+<!-- Bursty telemetry script -->
 <script>
 (function(){
   const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
@@ -198,7 +192,6 @@ style.css
     }
     loop();
   }
-
   document.querySelectorAll('.telemetry').forEach(startTelemetry);
 })();
 </script>
