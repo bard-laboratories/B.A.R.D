@@ -121,7 +121,27 @@
         if (!user) return;
 
         const uid = user.uid;
-        const sessionId = Math.random().toString(36).slice(2,10);
+
+        function generateSessionId() {
+          const alphabet = '0123456789abcdefghijklmnopqrstuvwxyz';
+          const length = 8;
+
+          if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+            const bytes = new Uint8Array(length);
+            crypto.getRandomValues(bytes);
+
+            let result = '';
+            for (let i = 0; i < length; i++) {
+              result += alphabet[bytes[i] % alphabet.length];
+            }
+            return result;
+          }
+
+          // Fallback: use Math.random if crypto is unavailable (non-cryptographic)
+          return Math.random().toString(36).slice(2, 2 + length);
+        }
+
+        const sessionId = generateSessionId();
         const myPath = `presence/${uid}/${sessionId}`;
         const myRef  = ref(db, myPath);
 
